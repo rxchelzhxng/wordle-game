@@ -38,40 +38,45 @@ class Wordle:
         None.
 
         """
-        # Iterate to query user to pick word 6 times unless word is correct
-        for guess in range(1, 7):
+        guess = 0
+        # Iterate to query user for word attempt until 6 tries
+        while guess < 7:
             attempt = input("Pick word: ")
-            print(f"Guess {guess}/6: {attempt}")
             
-            # If length of word is greater than 5, exit
+            # If length of word is not 5, exit
             if len(attempt) != 5:
                 print("Word must be five letters")
                 continue
                 
             # If word is in list of invalid solutions then inform it is not in the list
             elif attempt in self.invalid:
-                    print("Not in word list")
-                    continue
+                print("Not in word list")
+                continue
                 
             # Check if attempt word is a valid five letter word
             elif attempt not in self.solutions:
-                    print("Not in word list")
-                    continue
+                print("Not in word list")
+                continue
                     
             # Calculate the attempted guess
             else:
+                print(f"Guess {guess + 1}/6: {attempt}")
                 result = Result.calculateAttempt(solution, attempt)
                 print(f"Result: {result}")
+                # Update counter
+                guess += 1
+                # Check if all letters match the correct spot in solution
                 if all(result[letter] == Result.correct_spot for letter in range(len(attempt))):
                     print(f"Success! Got the solution in {guess} tries")
-                    break
-            
-    
+                    
+                # Check if all 6 attempts have been used
                 elif guess == 6:
                     next_step = input("Attempt was unsuccessful.\nHit enter to exit or type try again: ")
                     if next_step == "":
+                        play = False
                         return
                     else:
+                        play = True
                         self.__init__()
         
 class Result():
